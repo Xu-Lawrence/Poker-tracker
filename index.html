@@ -1,192 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Lawrence's Poker Tracker</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{
-font-family:Arial,sans-serif;
-background:linear-gradient(135deg,#0f172a,#1e3a8a);
-color:white;
-margin:0;
-padding:20px;
+  margin:0;
+  padding:20px;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#0f172a,#1e3a8a);
+  color:white;
 }
 
 .container{
-max-width:1400px;
-margin:auto;
+  max-width:1400px;
+  margin:auto;
 }
 
 .card{
-background:rgba(31,41,55,.96);
-padding:24px;
-border-radius:16px;
-margin-bottom:24px;
-box-shadow:0 8px 30px rgba(0,0,0,.25);
+  background:rgba(31,41,55,.96);
+  border-radius:16px;
+  padding:24px;
+  margin-bottom:24px;
+  box-shadow:0 8px 24px rgba(0,0,0,.25);
 }
 
-.form-grid,.edit-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:14px;
-align-items:end;
+h1,h2,h3{
+  margin-top:0;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:14px;
+  align-items:end;
 }
 
 .form-group{
-display:flex;
-flex-direction:column;
+  display:flex;
+  flex-direction:column;
 }
 
 .form-group label{
-margin-bottom:6px;
-font-size:14px;
-color:#cbd5e1;
+  margin-bottom:6px;
+  color:#cbd5e1;
+  font-size:14px;
 }
 
 input{
-width:100%;
-padding:10px;
-border-radius:8px;
-border:none;
-box-sizing:border-box;
+  padding:10px;
+  border:none;
+  border-radius:8px;
+  box-sizing:border-box;
 }
 
 button{
-padding:10px 16px;
-border:none;
-border-radius:8px;
-background:#2563eb;
-color:white;
-cursor:pointer;
-font-weight:bold;
+  border:none;
+  border-radius:8px;
+  padding:10px 14px;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
 }
 
-.secondary-btn{background:#475569;}
-
-.delete-btn{
-background:#dc2626;
-padding:6px 10px;
-font-size:12px;
+.primary-btn{
+  background:#2563eb;
 }
 
 .edit-btn{
-background:#f59e0b;
-padding:6px 10px;
-font-size:12px;
+  background:#f59e0b;
+  padding:6px 10px;
+  font-size:12px;
+}
+
+.delete-btn{
+  background:#dc2626;
+  padding:6px 10px;
+  font-size:12px;
 }
 
 .save-btn{
-background:#16a34a;
-}
-
-.cancel-btn{
-background:#64748b;
-}
-
-.toolbar{
-display:flex;
-gap:12px;
-margin-top:14px;
-flex-wrap:wrap;
+  background:#16a34a;
 }
 
 .stats-grid{
-display:grid;
-grid-template-columns:repeat(5,1fr);
-gap:14px;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:14px;
 }
 
 .stat-box{
-background:rgba(15,23,42,.95);
-border:1px solid #334155;
-border-radius:14px;
-padding:18px;
-text-align:center;
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:12px;
+  padding:16px;
+  text-align:center;
 }
 
 .stat-title{
-font-size:14px;
-color:#94a3b8;
-margin-bottom:10px;
+  color:#94a3b8;
+  font-size:14px;
+  margin-bottom:8px;
 }
 
 .stat-value{
-font-size:28px;
-font-weight:bold;
+  font-size:28px;
+  font-weight:bold;
 }
 
-.profit{color:#22c55e;}
-.loss{color:#ef4444;}
+.profit{
+  color:#22c55e;
+}
+
+.loss{
+  color:#ef4444;
+}
 
 .session-card,.hand-card{
-background:rgba(15,23,42,.95);
-border:1px solid #334155;
-border-radius:14px;
-padding:18px;
-margin-bottom:12px;
+  background:#0f172a;
+  border:1px solid #334155;
+  border-radius:14px;
+  padding:18px;
+  margin-bottom:14px;
 }
 
 .session-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
 }
 
 .session-actions{
-display:flex;
-gap:8px;
+  display:flex;
+  gap:8px;
 }
 
 .session-info{
-display:flex;
-flex-wrap:wrap;
-gap:18px;
-margin-top:10px;
+  display:flex;
+  flex-wrap:wrap;
+  gap:14px;
+  margin-top:14px;
 }
 
 .info-box{
-background:rgba(30,41,59,.95);
-padding:10px 14px;
-border-radius:10px;
+  background:#1e293b;
+  border-radius:10px;
+  padding:10px 14px;
 }
 
 .label{
-color:#94a3b8;
-font-size:12px;
+  color:#94a3b8;
+  font-size:12px;
+  margin-bottom:4px;
 }
 
 .edit-panel{
-margin-top:18px;
-padding-top:18px;
-border-top:1px solid #334155;
-display:none;
+  display:none;
+  margin-top:16px;
+  border-top:1px solid #334155;
+  padding-top:16px;
 }
 
 .hand-controls{
-display:flex;
-gap:10px;
-flex-wrap:wrap;
-margin-bottom:18px;
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:16px;
 }
 
 .hand-link{
-color:#93c5fd;
+  color:#93c5fd;
+}
+
+.empty{
+  text-align:center;
+  color:#94a3b8;
 }
 
 @media (max-width:1100px){
-.stats-grid{
-grid-template-columns:repeat(2,1fr);
-}
+  .stats-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
 }
 
 @media (max-width:600px){
-.stats-grid{
-grid-template-columns:1fr;
-}
+  .stats-grid{
+    grid-template-columns:1fr;
+  }
 }
 </style>
 </head>
@@ -205,31 +210,31 @@ grid-template-columns:1fr;
 
 <div class="form-group">
 <label>Date</label>
-<input type="date" id="date" required>
+<input type="date" id="date" required />
 </div>
 
 <div class="form-group">
 <label>Type</label>
-<input type="text" id="type" required>
+<input type="text" id="type" required />
 </div>
 
 <div class="form-group">
 <label>Hours</label>
-<input type="number" step="0.1" id="hours" required>
+<input type="number" id="hours" step="0.1" required />
 </div>
 
 <div class="form-group">
 <label>Buy-In</label>
-<input type="number" id="buyIn" required>
+<input type="number" id="buyIn" required />
 </div>
 
 <div class="form-group">
 <label>Buy-Out</label>
-<input type="number" id="buyOut" required>
+<input type="number" id="buyOut" required />
 </div>
 
 <div class="form-group">
-<button type="submit">Add Session</button>
+<button class="primary-btn" type="submit">Add Session</button>
 </div>
 
 </div>
@@ -251,7 +256,7 @@ grid-template-columns:1fr;
 
 <div class="stat-box">
 <div class="stat-title">Total Hours</div>
-<div id="totalHours" class="stat-value">0 hrs</div>
+<div id="totalHours" class="stat-value">0</div>
 </div>
 
 <div class="stat-box">
@@ -279,6 +284,8 @@ grid-template-columns:1fr;
 
 <div id="sessionsContainer"></div>
 
+<p id="emptySessions" class="empty">No poker sessions yet.</p>
+
 </div>
 
 <div class="card">
@@ -287,11 +294,10 @@ grid-template-columns:1fr;
 
 <div class="hand-controls">
 
-<input type="text" id="globalHandName" placeholder="Hand name">
+<input type="text" id="handName" placeholder="Hand Name" />
+<input type="text" id="handUrl" placeholder="Paste hand review URL" />
 
-<input type="text" id="globalHandUrl" placeholder="Paste hand review URL">
-
-<button onclick="addGlobalHand()">
+<button class="primary-btn" type="button" id="addHandBtn">
 Add Link
 </button>
 
@@ -304,12 +310,12 @@ Add Link
 </div>
 
 <script>
-
 const SUPABASE_URL = "https://miawufyzrohndqnlvlea.supabase.co";
 
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pYXd1Znl6cm9obmRxbmx2bGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1ODU3MDksImV4cCI6MjA5NTE2MTcwOX0.wa12xK9Q1x_yrSPpFf0a1KIq3oQkDOX_CTIKZVMKJXM";
+const SUPABASE_ANON_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pYXd1Znl6cm9obmRxbmx2bGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1ODU3MDksImV4cCI6MjA5NTE2MTcwOX0.wa12xK9Q1x_yrSPpFf0a1KIq3oQkDOX_CTIKZVMKJXM";
 
-const supabase = window.supabase.createClient(
+const client = window.supabase.createClient(
   SUPABASE_URL,
   SUPABASE_ANON_KEY
 );
@@ -318,386 +324,404 @@ let sessions = [];
 let hands = [];
 
 async function loadSessions() {
+  const { data, error } = await client
+    .from("sessions")
+    .select("*")
+    .order("session_date", { ascending: false });
 
-  const { data, error } = await supabase
-    .from('sessions')
-    .select('*')
-    .order('session_date', { ascending: false });
-
-  if(error){
+  if (error) {
     console.error(error);
+    alert("Error loading sessions: " + error.message);
     return;
   }
 
-  sessions = data.map(session => ({
-    id: session.id,
-    date: session.session_date,
-    type: session.session_type,
-    hours: Number(session.hours),
-    buyIn: Number(session.buy_in),
-    buyOut: Number(session.buy_out)
-  }));
-
+  sessions = data || [];
   renderSessions();
 }
 
-async function loadHands(){
+async function loadHands() {
+  const { data, error } = await client
+    .from("hand_reviews")
+    .select("*")
+    .order("created_at", { ascending: false });
 
-  const { data, error } = await supabase
-    .from('hand_reviews')
-    .select('*')
-    .order('created_at', { ascending: false });
-
-  if(error){
+  if (error) {
     console.error(error);
     return;
   }
 
-  hands = data.map(hand => ({
-    id: hand.id,
-    name: hand.hand_name,
-    url: hand.hand_url
-  }));
-
+  hands = data || [];
   renderHands();
 }
 
-function updateStats(){
+function updateStats() {
+  let totalProfit = 0;
+  let totalHours = 0;
+  let winning = 0;
+  let losing = 0;
 
-let totalProfit=0;
-let totalHours=0;
-let winningSessions=0;
-let losingSessions=0;
+  sessions.forEach(session => {
+    const profit =
+      Number(session.buy_out) - Number(session.buy_in);
 
-sessions.forEach(session=>{
+    totalProfit += profit;
+    totalHours += Number(session.hours);
 
-const profit=session.buyOut-session.buyIn;
+    if (profit >= 0) {
+      winning++;
+    } else {
+      losing++;
+    }
+  });
 
-totalProfit+=profit;
-totalHours+=Number(session.hours||0);
+  const perHour =
+    totalHours > 0 ? totalProfit / totalHours : 0;
 
-if(profit>=0){
-winningSessions++;
-}else{
-losingSessions++;
+  document.getElementById("totalProfit").textContent =
+    "$" + totalProfit.toFixed(2);
+
+  document.getElementById("totalHours").textContent =
+    totalHours.toFixed(1);
+
+  document.getElementById("dollarPerHour").textContent =
+    "$" + perHour.toFixed(2);
+
+  document.getElementById("winningSessions").textContent =
+    winning;
+
+  document.getElementById("losingSessions").textContent =
+    losing;
 }
 
-});
+function renderSessions() {
+  const container =
+    document.getElementById("sessionsContainer");
 
-const dollarPerHour =
-totalHours > 0 ? totalProfit / totalHours : 0;
+  const empty =
+    document.getElementById("emptySessions");
 
-document.getElementById("totalProfit").textContent=
-`$${totalProfit.toFixed(2)}`;
+  container.innerHTML = "";
 
-document.getElementById("totalHours").textContent=
-`${totalHours.toFixed(1)} hrs`;
+  if (sessions.length === 0) {
+    empty.style.display = "block";
+    updateStats();
+    return;
+  }
 
-document.getElementById("dollarPerHour").textContent=
-`$${dollarPerHour.toFixed(2)}`;
+  empty.style.display = "none";
 
-document.getElementById("winningSessions").textContent=
-winningSessions;
+  sessions.forEach(session => {
+    const profit =
+      Number(session.buy_out) - Number(session.buy_in);
 
-document.getElementById("losingSessions").textContent=
-losingSessions;
+    const card = document.createElement("div");
+    card.className = "session-card";
 
+    card.innerHTML = `
+      <div class="session-header">
+
+        <h3>${session.session_date}</h3>
+
+        <div class="session-actions">
+
+          <button
+            class="edit-btn"
+            type="button"
+            onclick="toggleEdit(${session.id})"
+          >
+            Edit
+          </button>
+
+          <button
+            class="delete-btn"
+            type="button"
+            onclick="deleteSession(${session.id})"
+          >
+            Delete
+          </button>
+
+        </div>
+
+      </div>
+
+      <div class="session-info">
+
+        <div class="info-box">
+          <div class="label">Type</div>
+          <div>${session.session_type}</div>
+        </div>
+
+        <div class="info-box">
+          <div class="label">Hours</div>
+          <div>${session.hours}</div>
+        </div>
+
+        <div class="info-box">
+          <div class="label">Buy-In</div>
+          <div>$${Number(session.buy_in).toFixed(2)}</div>
+        </div>
+
+        <div class="info-box">
+          <div class="label">Buy-Out</div>
+          <div>$${Number(session.buy_out).toFixed(2)}</div>
+        </div>
+
+        <div class="info-box">
+          <div class="label">Profit</div>
+          <div class="${profit >= 0 ? "profit" : "loss"}">
+            $${profit.toFixed(2)}
+          </div>
+        </div>
+
+      </div>
+
+      <div class="edit-panel" id="edit-${session.id}">
+
+        <div class="form-grid">
+
+          <div class="form-group">
+            <label>Date</label>
+            <input type="date" id="edit-date-${session.id}" value="${session.session_date}" />
+          </div>
+
+          <div class="form-group">
+            <label>Type</label>
+            <input type="text" id="edit-type-${session.id}" value="${session.session_type}" />
+          </div>
+
+          <div class="form-group">
+            <label>Hours</label>
+            <input type="number" step="0.1" id="edit-hours-${session.id}" value="${session.hours}" />
+          </div>
+
+          <div class="form-group">
+            <label>Buy-In</label>
+            <input type="number" id="edit-buyin-${session.id}" value="${session.buy_in}" />
+          </div>
+
+          <div class="form-group">
+            <label>Buy-Out</label>
+            <input type="number" id="edit-buyout-${session.id}" value="${session.buy_out}" />
+          </div>
+
+          <div class="form-group">
+            <button
+              class="save-btn"
+              type="button"
+              onclick="saveEdit(${session.id})"
+            >
+              Save
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    `;
+
+    container.appendChild(card);
+  });
+
+  updateStats();
 }
 
-function renderSessions(){
+function toggleEdit(id) {
+  const panel = document.getElementById("edit-" + id);
 
-const container=document.getElementById("sessionsContainer");
-
-container.innerHTML="";
-
-updateStats();
-
-sessions.forEach(session=>{
-
-const profit=session.buyOut-session.buyIn;
-
-const card=document.createElement("div");
-
-card.className="session-card";
-
-card.innerHTML=`
-
-<div class="session-header">
-
-<h3>${session.date}</h3>
-
-<div class="session-actions">
-
-<button
-class="edit-btn"
-onclick="toggleEdit(${session.id})"
->
-Edit
-</button>
-
-<button
-class="delete-btn"
-onclick="deleteSession(${session.id})"
->
-Delete
-</button>
-
-</div>
-
-</div>
-
-<div class="session-info">
-
-<div class="info-box">
-<div class="label">Type</div>
-<div>${session.type}</div>
-</div>
-
-<div class="info-box">
-<div class="label">Hours</div>
-<div>${session.hours}</div>
-</div>
-
-<div class="info-box">
-<div class="label">Buy-In</div>
-<div>$${session.buyIn.toFixed(2)}</div>
-</div>
-
-<div class="info-box">
-<div class="label">Buy-Out</div>
-<div>$${session.buyOut.toFixed(2)}</div>
-</div>
-
-<div class="info-box">
-<div class="label">Profit</div>
-<div class="${profit>=0?'profit':'loss'}">
-$${profit.toFixed(2)}
-</div>
-</div>
-
-</div>
-
-<div id="editPanel-${session.id}" class="edit-panel">
-
-<div class="edit-grid">
-
-<div class="form-group">
-<label>Date</label>
-<input type="date" id="edit-date-${session.id}" value="${session.date}">
-</div>
-
-<div class="form-group">
-<label>Type</label>
-<input type="text" id="edit-type-${session.id}" value="${session.type}">
-</div>
-
-<div class="form-group">
-<label>Hours</label>
-<input type="number" step="0.1" id="edit-hours-${session.id}" value="${session.hours}">
-</div>
-
-<div class="form-group">
-<label>Buy-In</label>
-<input type="number" id="edit-buyIn-${session.id}" value="${session.buyIn}">
-</div>
-
-<div class="form-group">
-<label>Buy-Out</label>
-<input type="number" id="edit-buyOut-${session.id}" value="${session.buyOut}">
-</div>
-
-<div class="form-group">
-<button class="save-btn" onclick="saveEdit(${session.id})">
-Save Changes
-</button>
-</div>
-
-</div>
-
-</div>
-`;
-
-container.appendChild(card);
-
-});
-
+  panel.style.display =
+    panel.style.display === "block"
+      ? "none"
+      : "block";
 }
 
-function toggleEdit(id){
+async function saveEdit(id) {
+  const updated = {
+    session_date:
+      document.getElementById("edit-date-" + id).value,
 
-const panel=document.getElementById(`editPanel-${id}`);
+    session_type:
+      document.getElementById("edit-type-" + id).value,
 
-panel.style.display =
-panel.style.display === "block" ? "none" : "block";
+    hours: parseFloat(
+      document.getElementById("edit-hours-" + id).value
+    ),
 
-}
+    buy_in: parseFloat(
+      document.getElementById("edit-buyin-" + id).value
+    ),
 
-async function saveEdit(id){
-
-  const updatedSession = {
-    session_date: document.getElementById(`edit-date-${id}`).value,
-    session_type: document.getElementById(`edit-type-${id}`).value,
-    hours: parseFloat(document.getElementById(`edit-hours-${id}`).value),
-    buy_in: parseFloat(document.getElementById(`edit-buyIn-${id}`).value),
-    buy_out: parseFloat(document.getElementById(`edit-buyOut-${id}`).value)
+    buy_out: parseFloat(
+      document.getElementById("edit-buyout-" + id).value
+    )
   };
 
-  const { error } = await supabase
-    .from('sessions')
-    .update(updatedSession)
-    .eq('id', id);
+  const { error } = await client
+    .from("sessions")
+    .update(updated)
+    .eq("id", id);
 
-  if(error){
-    console.error(error);
+  if (error) {
+    alert(error.message);
     return;
   }
 
-  await loadSessions();
+  loadSessions();
 }
 
-async function deleteSession(id){
-
-  const { error } = await supabase
-    .from('sessions')
+async function deleteSession(id) {
+  const { error } = await client
+    .from("sessions")
     .delete()
-    .eq('id', id);
+    .eq("id", id);
 
-  if(error){
-    console.error(error);
+  if (error) {
+    alert(error.message);
     return;
   }
 
-  await loadSessions();
+  loadSessions();
 }
 
-function renderHands(){
+function renderHands() {
+  const container =
+    document.getElementById("handsContainer");
 
-const container=document.getElementById("handsContainer");
+  container.innerHTML = "";
 
-container.innerHTML="";
+  if (hands.length === 0) {
+    container.innerHTML =
+      '<p class="empty">No hand review links yet.</p>';
+    return;
+  }
 
-hands.forEach((hand)=>{
+  hands.forEach(hand => {
+    const card = document.createElement("div");
 
-const card=document.createElement("div");
+    card.className = "hand-card";
 
-card.className="hand-card";
+    card.innerHTML = `
+      <div style="display:flex;justify-content:space-between;gap:16px;align-items:center;">
 
-card.innerHTML=`
+        <div>
+          <div><strong>${hand.hand_name}</strong></div>
 
-<div style="display:flex;justify-content:space-between;align-items:center;gap:16px;">
+          <a
+            class="hand-link"
+            href="${hand.hand_url}"
+            target="_blank"
+          >
+            ${hand.hand_url}
+          </a>
+        </div>
 
-<div>
-<div><strong>${hand.name}</strong></div>
+        <button
+          class="delete-btn"
+          type="button"
+          onclick="deleteHand(${hand.id})"
+        >
+          Delete
+        </button>
 
-<a
-class="hand-link"
-href="${hand.url}"
-target="_blank"
->
-${hand.url}
-</a>
-</div>
+      </div>
+    `;
 
-<button
-class="delete-btn"
-onclick="deleteHand(${hand.id})"
->
-Delete
-</button>
-
-</div>
-`;
-
-container.appendChild(card);
-
-});
-
+    container.appendChild(card);
+  });
 }
 
-async function addGlobalHand(){
-
+async function addHand() {
   const handName =
-    document.getElementById("globalHandName").value.trim();
+    document.getElementById("handName").value.trim();
 
   const handUrl =
-    document.getElementById("globalHandUrl").value.trim();
+    document.getElementById("handUrl").value.trim();
 
-  if(!handName || !handUrl){
+  if (!handName || !handUrl) {
     alert("Enter both a hand name and URL.");
     return;
   }
 
-  const { error } = await supabase
-    .from('hand_reviews')
-    .insert({
-      hand_name: handName,
-      hand_url: handUrl
-    });
+  const { error } = await client
+    .from("hand_reviews")
+    .insert([
+      {
+        hand_name: handName,
+        hand_url: handUrl
+      }
+    ]);
 
-  if(error){
-    console.error(error);
+  if (error) {
+    alert(error.message);
     return;
   }
 
-  document.getElementById("globalHandName").value = "";
-  document.getElementById("globalHandUrl").value = "";
+  document.getElementById("handName").value = "";
+  document.getElementById("handUrl").value = "";
 
-  await loadHands();
+  loadHands();
 }
 
-async function deleteHand(id){
-
-  const { error } = await supabase
-    .from('hand_reviews')
+async function deleteHand(id) {
+  const { error } = await client
+    .from("hand_reviews")
     .delete()
-    .eq('id', id);
+    .eq("id", id);
 
-  if(error){
-    console.error(error);
+  if (error) {
+    alert(error.message);
     return;
   }
 
-  await loadHands();
+  loadHands();
 }
 
-document.getElementById("sessionForm")
-.addEventListener("submit", async function(e){
+document
+  .getElementById("addHandBtn")
+  .addEventListener("click", addHand);
 
-e.preventDefault();
+document
+  .getElementById("sessionForm")
+  .addEventListener("submit", async function(event) {
 
-const session={
-date:document.getElementById("date").value,
-type:document.getElementById("type").value,
-hours:parseFloat(document.getElementById("hours").value),
-buyIn:parseFloat(document.getElementById("buyIn").value),
-buyOut:parseFloat(document.getElementById("buyOut").value)
-};
+    event.preventDefault();
 
-  const { error } = await supabase
-    .from('sessions')
-    .insert({
-      session_date: session.date,
-      session_type: session.type,
-      hours: session.hours,
-      buy_in: session.buyIn,
-      buy_out: session.buyOut
-    });
+    const session = {
+      session_date:
+        document.getElementById("date").value,
 
-  if(error){
-    console.error(error);
-    alert("Failed to save session.");
-    return;
-  }
+      session_type:
+        document.getElementById("type").value,
 
-  this.reset();
+      hours: parseFloat(
+        document.getElementById("hours").value
+      ),
 
-  await loadSessions();
+      buy_in: parseFloat(
+        document.getElementById("buyIn").value
+      ),
 
-});
+      buy_out: parseFloat(
+        document.getElementById("buyOut").value
+      )
+    };
+
+    const { error } = await client
+      .from("sessions")
+      .insert([session]);
+
+    if (error) {
+      console.error(error);
+      alert("Failed to add session: " + error.message);
+      return;
+    }
+
+    this.reset();
+
+    loadSessions();
+  });
 
 loadSessions();
 loadHands();
-
 </script>
 
 </body>
