@@ -16,7 +16,7 @@ padding:20px;
 }
 
 .container{
-max-width:1100px;
+max-width:1400px;
 margin:auto;
 }
 
@@ -65,6 +65,7 @@ font-weight:bold;
 }
 
 .secondary-btn{background:#475569;}
+
 .delete-btn{
 background:#dc2626;
 padding:6px 10px;
@@ -94,21 +95,36 @@ flex-wrap:wrap;
 
 .stats-grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:16px;
+grid-template-columns:repeat(5,1fr);
+gap:14px;
 }
 
-.stat-box,.session-card,.hand-card{
+.stat-box{
+background:rgba(15,23,42,.95);
+border:1px solid #334155;
+border-radius:14px;
+padding:18px;
+text-align:center;
+min-width:0;
+}
+
+.session-card,.hand-card{
 background:rgba(15,23,42,.95);
 border:1px solid #334155;
 border-radius:14px;
 padding:18px;
 }
 
+.stat-title{
+font-size:14px;
+color:#94a3b8;
+margin-bottom:10px;
+}
+
 .stat-value{
-margin-top:10px;
 font-size:28px;
 font-weight:bold;
+word-break:break-word;
 }
 
 .profit{color:#22c55e;}
@@ -175,6 +191,18 @@ margin-top:18px;
 padding-top:18px;
 border-top:1px solid #334155;
 }
+
+@media (max-width:1100px){
+.stats-grid{
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+@media (max-width:600px){
+.stats-grid{
+grid-template-columns:1fr;
+}
+}
 </style>
 </head>
 
@@ -224,6 +252,7 @@ border-top:1px solid #334155;
 </form>
 
 <div class="toolbar">
+
 <button class="secondary-btn" onclick="exportData()">
 Export Data
 </button>
@@ -233,6 +262,7 @@ Import Data
 </button>
 
 <input type="file" id="importFile" class="hidden-input" accept=".json">
+
 </div>
 
 </div>
@@ -244,22 +274,27 @@ Import Data
 <div class="stats-grid">
 
 <div class="stat-box">
-<div>Total Net Profit</div>
+<div class="stat-title">Total Net Profit</div>
 <div id="totalProfit" class="stat-value">$0.00</div>
 </div>
 
 <div class="stat-box">
-<div>Total Hours</div>
+<div class="stat-title">Total Hours</div>
 <div id="totalHours" class="stat-value">0 hrs</div>
 </div>
 
 <div class="stat-box">
-<div>Winning Sessions</div>
+<div class="stat-title">$ Per Hour</div>
+<div id="dollarPerHour" class="stat-value">$0.00</div>
+</div>
+
+<div class="stat-box">
+<div class="stat-title">Winning Sessions</div>
 <div id="winningSessions" class="stat-value profit">0</div>
 </div>
 
 <div class="stat-box">
-<div>Losing Sessions</div>
+<div class="stat-title">Losing Sessions</div>
 <div id="losingSessions" class="stat-value loss">0</div>
 </div>
 
@@ -339,11 +374,17 @@ losingSessions++;
 
 });
 
+const dollarPerHour =
+totalHours > 0 ? totalProfit / totalHours : 0;
+
 document.getElementById("totalProfit").textContent=
 `$${totalProfit.toFixed(2)}`;
 
 document.getElementById("totalHours").textContent=
 `${totalHours.toFixed(1)} hrs`;
+
+document.getElementById("dollarPerHour").textContent=
+`$${dollarPerHour.toFixed(2)}`;
 
 document.getElementById("winningSessions").textContent=
 winningSessions;
