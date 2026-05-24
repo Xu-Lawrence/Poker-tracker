@@ -5,40 +5,189 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lawrence's Poker Tracker</title>
+
 <style>
-body{font-family:Arial,sans-serif;background:linear-gradient(135deg,#0f172a,#1e3a8a);color:white;margin:0;padding:20px}
-.container{max-width:1100px;margin:auto}
-.card{background:rgba(31,41,55,.96);padding:24px;border-radius:16px;margin-bottom:24px;box-shadow:0 8px 30px rgba(0,0,0,.25)}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;align-items:end}
-.form-group{display:flex;flex-direction:column}
-.form-group label{margin-bottom:6px;font-size:14px;color:#cbd5e1}
-input{width:100%;padding:10px;border-radius:8px;border:none;box-sizing:border-box}
-button{padding:10px 16px;border:none;border-radius:8px;background:#2563eb;color:white;cursor:pointer;font-weight:bold}
-.secondary-btn{background:#475569}
-.delete-btn{background:#dc2626;padding:6px 10px;font-size:12px}
-.toolbar{display:flex;gap:12px;margin-top:14px;flex-wrap:wrap}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-.stat-box,.session-card,.hand-card{background:rgba(15,23,42,.95);border:1px solid #334155;border-radius:14px;padding:18px}
-.stat-value{margin-top:10px;font-size:28px;font-weight:bold}
-.profit{color:#22c55e}.loss{color:#ef4444}
-.session-list{display:flex;flex-direction:column;gap:12px}
-.session-header{display:flex;justify-content:space-between;align-items:center}
-.session-info{display:flex;flex-wrap:wrap;gap:18px;margin-top:10px}
-.info-box{background:rgba(30,41,59,.95);padding:10px 14px;border-radius:10px}
-.label{color:#94a3b8;font-size:12px}
-.hand-controls{display:flex;gap:10px;flex-wrap:wrap}
-.hand-link{color:#93c5fd}
-.empty{text-align:center;color:#94a3b8;padding:20px 0}
-.hidden-input{display:none}
+body{
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#0f172a,#1e3a8a);
+color:white;
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+}
+
+.card{
+background:rgba(31,41,55,.96);
+padding:24px;
+border-radius:16px;
+margin-bottom:24px;
+box-shadow:0 8px 30px rgba(0,0,0,.25);
+}
+
+.form-grid,.edit-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:14px;
+align-items:end;
+}
+
+.form-group{
+display:flex;
+flex-direction:column;
+}
+
+.form-group label{
+margin-bottom:6px;
+font-size:14px;
+color:#cbd5e1;
+}
+
+input{
+width:100%;
+padding:10px;
+border-radius:8px;
+border:none;
+box-sizing:border-box;
+}
+
+button{
+padding:10px 16px;
+border:none;
+border-radius:8px;
+background:#2563eb;
+color:white;
+cursor:pointer;
+font-weight:bold;
+}
+
+.secondary-btn{background:#475569;}
+.delete-btn{
+background:#dc2626;
+padding:6px 10px;
+font-size:12px;
+}
+
+.edit-btn{
+background:#f59e0b;
+padding:6px 10px;
+font-size:12px;
+}
+
+.save-btn{
+background:#16a34a;
+}
+
+.cancel-btn{
+background:#64748b;
+}
+
+.toolbar{
+display:flex;
+gap:12px;
+margin-top:14px;
+flex-wrap:wrap;
+}
+
+.stats-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:16px;
+}
+
+.stat-box,.session-card,.hand-card{
+background:rgba(15,23,42,.95);
+border:1px solid #334155;
+border-radius:14px;
+padding:18px;
+}
+
+.stat-value{
+margin-top:10px;
+font-size:28px;
+font-weight:bold;
+}
+
+.profit{color:#22c55e;}
+.loss{color:#ef4444;}
+
+.session-list{
+display:flex;
+flex-direction:column;
+gap:12px;
+}
+
+.session-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:10px;
+}
+
+.session-actions{
+display:flex;
+gap:8px;
+}
+
+.session-info{
+display:flex;
+flex-wrap:wrap;
+gap:18px;
+margin-top:10px;
+}
+
+.info-box{
+background:rgba(30,41,59,.95);
+padding:10px 14px;
+border-radius:10px;
+}
+
+.label{
+color:#94a3b8;
+font-size:12px;
+}
+
+.hand-controls{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+}
+
+.hand-link{
+color:#93c5fd;
+}
+
+.empty{
+text-align:center;
+color:#94a3b8;
+padding:20px 0;
+}
+
+.hidden-input{
+display:none;
+}
+
+.edit-panel{
+margin-top:18px;
+padding-top:18px;
+border-top:1px solid #334155;
+}
 </style>
 </head>
+
 <body>
+
 <div class="container">
 
 <div class="card">
+
 <h1>♠ Lawrence's Poker Tracker</h1>
 
 <form id="sessionForm">
+
 <div class="form-grid">
 
 <div class="form-group">
@@ -71,17 +220,25 @@ button{padding:10px 16px;border:none;border-radius:8px;background:#2563eb;color:
 </div>
 
 </div>
+
 </form>
 
 <div class="toolbar">
-<button class="secondary-btn" onclick="exportData()">Export Data</button>
-<button class="secondary-btn" onclick="triggerImport()">Import Data</button>
+<button class="secondary-btn" onclick="exportData()">
+Export Data
+</button>
+
+<button class="secondary-btn" onclick="triggerImport()">
+Import Data
+</button>
+
 <input type="file" id="importFile" class="hidden-input" accept=".json">
 </div>
 
 </div>
 
 <div class="card">
+
 <h2>Poker Stats</h2>
 
 <div class="stats-grid">
@@ -93,7 +250,7 @@ button{padding:10px 16px;border:none;border-radius:8px;background:#2563eb;color:
 
 <div class="stat-box">
 <div>Total Hours</div>
-<div id="totalHours" class="stat-value">0</div>
+<div id="totalHours" class="stat-value">0 hrs</div>
 </div>
 
 <div class="stat-box">
@@ -107,38 +264,50 @@ button{padding:10px 16px;border:none;border-radius:8px;background:#2563eb;color:
 </div>
 
 </div>
+
 </div>
 
 <div class="card">
+
 <h2>Poker Sessions</h2>
+
 <div id="sessionsContainer" class="session-list"></div>
-<p id="emptyText" class="empty">No poker sessions yet.</p>
+
+<p id="emptyText" class="empty">
+No poker sessions yet.
+</p>
+
 </div>
 
 <div class="card">
+
 <h2>Hand Review Links</h2>
 
 <div class="hand-controls">
+
 <input type="text" id="globalHandName" placeholder="Hand name">
+
 <input type="text" id="globalHandUrl" placeholder="Paste hand review URL">
-<button onclick="addGlobalHand()">Add Link</button>
+
+<button onclick="addGlobalHand()">
+Add Link
+</button>
+
 </div>
 
 <div id="handsContainer"></div>
+
 </div>
 
 </div>
 
 <script>
+
 const SESSION_STORAGE_KEY="pokerSessions";
 const HAND_STORAGE_KEY="pokerHandReviews";
 
 let sessions=JSON.parse(localStorage.getItem(SESSION_STORAGE_KEY))||[];
 let hands=JSON.parse(localStorage.getItem(HAND_STORAGE_KEY))||[];
-
-const sessionsContainer=document.getElementById("sessionsContainer");
-const handsContainer=document.getElementById("handsContainer");
-const emptyText=document.getElementById("emptyText");
 
 function saveSessions(){
 localStorage.setItem(SESSION_STORAGE_KEY,JSON.stringify(sessions));
@@ -181,11 +350,16 @@ winningSessions;
 
 document.getElementById("losingSessions").textContent=
 losingSessions;
+
 }
 
 function renderSessions(){
 
-sessionsContainer.innerHTML="";
+const container=document.getElementById("sessionsContainer");
+const emptyText=document.getElementById("emptyText");
+
+container.innerHTML="";
+
 updateStats();
 
 if(sessions.length===0){
@@ -202,17 +376,37 @@ const sorted=[...sessions].sort(
 sorted.forEach(session=>{
 
 const originalIndex=sessions.indexOf(session);
+
 const profit=session.buyOut-session.buyIn;
 
 const card=document.createElement("div");
+
 card.className="session-card";
 
 card.innerHTML=`
+
 <div class="session-header">
+
 <h3>${session.date}</h3>
-<button class="delete-btn" onclick="deleteSession(${originalIndex})">
-Delete Session
+
+<div class="session-actions">
+
+<button
+class="edit-btn"
+onclick="toggleEdit(${originalIndex})"
+>
+Edit
 </button>
+
+<button
+class="delete-btn"
+onclick="deleteSession(${originalIndex})"
+>
+Delete
+</button>
+
+</div>
+
 </div>
 
 <div class="session-info">
@@ -239,78 +433,103 @@ Delete Session
 
 <div class="info-box">
 <div class="label">Profit</div>
-<div class="${profit>=0?"profit":"loss"}">
+<div class="${profit>=0?'profit':'loss'}">
 $${profit.toFixed(2)}
 </div>
 </div>
 
 </div>
-`;
 
-sessionsContainer.appendChild(card);
+<div
+id="editPanel-${originalIndex}"
+class="edit-panel"
+style="display:none;"
+>
 
-});
-}
+<div class="edit-grid">
 
-function renderHands(){
-
-handsContainer.innerHTML="";
-
-if(hands.length===0){
-handsContainer.innerHTML=
-'<p class="empty">No hand review links added yet.</p>';
-return;
-}
-
-hands.forEach((hand,index)=>{
-
-const card=document.createElement("div");
-card.className="hand-card";
-
-card.innerHTML=`
-<div>
-<div><strong>${hand.name}</strong></div>
-<a class="hand-link" href="${hand.url}" target="_blank">
-${hand.url}
-</a>
+<div class="form-group">
+<label>Date</label>
+<input type="date" id="edit-date-${originalIndex}" value="${session.date}">
 </div>
 
-<button class="delete-btn" onclick="deleteHand(${index})">
-Delete
+<div class="form-group">
+<label>Type</label>
+<input type="text" id="edit-type-${originalIndex}" value="${session.type}">
+</div>
+
+<div class="form-group">
+<label>Hours</label>
+<input type="number" step="0.1" id="edit-hours-${originalIndex}" value="${session.hours}">
+</div>
+
+<div class="form-group">
+<label>Buy-In</label>
+<input type="number" id="edit-buyIn-${originalIndex}" value="${session.buyIn}">
+</div>
+
+<div class="form-group">
+<label>Buy-Out</label>
+<input type="number" id="edit-buyOut-${originalIndex}" value="${session.buyOut}">
+</div>
+
+<div class="form-group">
+
+<button
+class="save-btn"
+onclick="saveEdit(${originalIndex})"
+>
+Save Changes
 </button>
+
+</div>
+
+</div>
+
+<div style="margin-top:12px;">
+<button
+class="cancel-btn"
+onclick="toggleEdit(${originalIndex})"
+>
+Cancel
+</button>
+</div>
+
+</div>
 `;
 
-handsContainer.appendChild(card);
+container.appendChild(card);
 
 });
+
 }
 
-function addGlobalHand(){
+function toggleEdit(index){
 
-const handName=document.getElementById("globalHandName").value.trim();
-const handUrl=document.getElementById("globalHandUrl").value.trim();
+const panel=document.getElementById(`editPanel-${index}`);
 
-if(!handName||!handUrl){
-alert("Please enter both a hand name and URL.");
-return;
+if(panel.style.display==="none"){
+panel.style.display="block";
+}else{
+panel.style.display="none";
 }
 
-hands.push({
-name:handName,
-url:handUrl
-});
-
-saveHands();
-renderHands();
-
-document.getElementById("globalHandName").value="";
-document.getElementById("globalHandUrl").value="";
 }
 
-function deleteHand(index){
-hands.splice(index,1);
-saveHands();
-renderHands();
+function saveEdit(index){
+
+sessions[index]={
+date:document.getElementById(`edit-date-${index}`).value,
+type:document.getElementById(`edit-type-${index}`).value,
+hours:parseFloat(document.getElementById(`edit-hours-${index}`).value),
+buyIn:parseFloat(document.getElementById(`edit-buyIn-${index}`).value),
+buyOut:parseFloat(document.getElementById(`edit-buyOut-${index}`).value)
+};
+
+saveSessions();
+
+renderSessions();
+
 }
 
 function deleteSession(index){
@@ -320,7 +539,98 @@ if(!confirm("Delete this poker session?")) return;
 sessions.splice(index,1);
 
 saveSessions();
+
 renderSessions();
+
+}
+
+function renderHands(){
+
+const container=document.getElementById("handsContainer");
+
+container.innerHTML="";
+
+if(hands.length===0){
+
+container.innerHTML=
+'<p class="empty">No hand review links added yet.</p>';
+
+return;
+}
+
+hands.forEach((hand,index)=>{
+
+const card=document.createElement("div");
+
+card.className="hand-card";
+
+card.innerHTML=`
+
+<div>
+
+<div><strong>${hand.name}</strong></div>
+
+<a
+class="hand-link"
+href="${hand.url}"
+target="_blank"
+>
+${hand.url}
+</a>
+
+</div>
+
+<button
+class="delete-btn"
+onclick="deleteHand(${index})"
+>
+Delete
+</button>
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+function addGlobalHand(){
+
+const handName=
+document.getElementById("globalHandName").value.trim();
+
+const handUrl=
+document.getElementById("globalHandUrl").value.trim();
+
+if(!handName||!handUrl){
+
+alert("Please enter both a hand name and URL.");
+
+return;
+}
+
+hands.push({
+name:handName,
+url:handUrl
+});
+
+saveHands();
+
+renderHands();
+
+document.getElementById("globalHandName").value="";
+document.getElementById("globalHandUrl").value="";
+
+}
+
+function deleteHand(index){
+
+hands.splice(index,1);
+
+saveHands();
+
+renderHands();
+
 }
 
 function exportData(){
@@ -341,10 +651,14 @@ const url=URL.createObjectURL(blob);
 const a=document.createElement("a");
 
 a.href=url;
-a.download="lawrence-poker-tracker-backup.json";
+
+a.download=
+"lawrence-poker-tracker-backup.json";
+
 a.click();
 
 URL.revokeObjectURL(url);
+
 }
 
 function triggerImport(){
@@ -364,7 +678,8 @@ reader.onload=function(e){
 
 try{
 
-const importedData=JSON.parse(e.target.result);
+const importedData=
+JSON.parse(e.target.result);
 
 sessions=importedData.sessions||[];
 hands=importedData.hands||[];
@@ -397,14 +712,21 @@ e.preventDefault();
 const session={
 date:document.getElementById("date").value,
 type:document.getElementById("type").value,
-hours:parseFloat(document.getElementById("hours").value),
-buyIn:parseFloat(document.getElementById("buyIn").value),
-buyOut:parseFloat(document.getElementById("buyOut").value)
+hours:parseFloat(
+document.getElementById("hours").value
+),
+buyIn:parseFloat(
+document.getElementById("buyIn").value
+),
+buyOut:parseFloat(
+document.getElementById("buyOut").value
+)
 };
 
 sessions.push(session);
 
 saveSessions();
+
 renderSessions();
 
 this.reset();
@@ -413,6 +735,8 @@ this.reset();
 
 renderSessions();
 renderHands();
+
 </script>
+
 </body>
 </html>
