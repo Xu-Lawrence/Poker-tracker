@@ -29,16 +29,6 @@ margin-bottom:24px;
 box-shadow:0 8px 24px rgba(0,0,0,.25);
 }
 
-.profit-day{
-background:rgba(34,197,94,0.22);
-border:1px solid #22c55e;
-}
-
-.loss-day{
-background:rgba(239,68,68,0.22);
-border:1px solid #ef4444;
-}
-
 summary{
 font-size:28px;
 font-weight:bold;
@@ -500,28 +490,11 @@ s => s.session_date === formattedDate
 const today =
 day === now.getDate();
 
-const totalDayProfit = daySessions.reduce((sum, session) => {
-return sum + (
-Number(session.buy_out) -
-Number(session.buy_in)
-);
-}, 0);
-
-let profitClass = "";
-
-if(daySessions.length > 0){
-profitClass =
-totalDayProfit >= 0
-? "profit-day"
-: "loss-day";
-}
-
 html += `
 <div
-class="calendar-day ${today ? 'today' : ''} ${profitClass}"
+class="calendar-day ${today ? 'today' : ''}"
 onclick="jumpToSessionDate('${formattedDate}')"
 >
-`;
 
 <div class="calendar-date">${day}</div>
 
