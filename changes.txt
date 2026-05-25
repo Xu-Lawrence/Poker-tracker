@@ -1,0 +1,3 @@
+- dates on the calendar are green or red depending on net positive or net negative
+- always display the poker sessions calendar and make the actual list of poker sessions a drop down in a section below
+- 
