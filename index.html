@@ -1,197 +1,257 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lawrence's Poker Tracker</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 body{
-  margin:0;
-  padding:20px;
-  font-family:Arial,sans-serif;
-  background:linear-gradient(135deg,#0f172a,#1e3a8a);
-  color:white;
+margin:0;
+padding:20px;
+font-family:Arial,sans-serif;
+background:linear-gradient(135deg,#0f172a,#1e3a8a);
+color:white;
 }
 
 .container{
-  max-width:1400px;
-  margin:auto;
+max-width:1400px;
+margin:auto;
 }
 
 .card{
-  background:rgba(31,41,55,.96);
-  border-radius:16px;
-  padding:24px;
-  margin-bottom:24px;
-  box-shadow:0 8px 24px rgba(0,0,0,.25);
+background:rgba(31,41,55,.96);
+border-radius:16px;
+padding:24px;
+margin-bottom:24px;
+box-shadow:0 8px 24px rgba(0,0,0,.25);
 }
 
-h1,h2,h3{
-  margin-top:0;
+summary{
+font-size:28px;
+font-weight:bold;
+cursor:pointer;
 }
 
 .form-grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:14px;
-  align-items:end;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+gap:14px;
+align-items:end;
 }
 
 .form-group{
-  display:flex;
-  flex-direction:column;
+display:flex;
+flex-direction:column;
 }
 
 .form-group label{
-  margin-bottom:6px;
-  color:#cbd5e1;
-  font-size:14px;
+margin-bottom:6px;
+font-size:14px;
+color:#cbd5e1;
 }
 
 input{
-  padding:10px;
-  border:none;
-  border-radius:8px;
-  box-sizing:border-box;
+padding:10px;
+border:none;
+border-radius:8px;
 }
 
 button{
-  border:none;
-  border-radius:8px;
-  padding:10px 14px;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
+border:none;
+border-radius:8px;
+padding:10px 14px;
+font-weight:bold;
+cursor:pointer;
+color:white;
 }
 
-.primary-btn{
-  background:#2563eb;
-}
-
-.edit-btn{
-  background:#f59e0b;
-  padding:6px 10px;
-  font-size:12px;
-}
-
-.delete-btn{
-  background:#dc2626;
-  padding:6px 10px;
-  font-size:12px;
-}
-
-.save-btn{
-  background:#16a34a;
-}
+.primary-btn{background:#2563eb;}
+.edit-btn{background:#f59e0b;padding:6px 10px;font-size:12px;}
+.delete-btn{background:#dc2626;padding:6px 10px;font-size:12px;}
+.save-btn{background:#16a34a;}
 
 .stats-grid{
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:14px;
+display:grid;
+grid-template-columns:repeat(5,1fr);
+gap:14px;
 }
 
 .stat-box{
-  background:#0f172a;
-  border:1px solid #334155;
-  border-radius:12px;
-  padding:16px;
-  text-align:center;
+background:#0f172a;
+border:1px solid #334155;
+border-radius:12px;
+padding:16px;
+text-align:center;
 }
 
 .stat-title{
-  color:#94a3b8;
-  font-size:14px;
-  margin-bottom:8px;
+font-size:14px;
+color:#94a3b8;
+margin-bottom:8px;
 }
 
 .stat-value{
-  font-size:28px;
-  font-weight:bold;
+font-size:28px;
+font-weight:bold;
 }
 
-.profit{
-  color:#22c55e;
+.profit{color:#22c55e;}
+.loss{color:#ef4444;}
+
+.calendar{
+margin-top:20px;
+margin-bottom:28px;
 }
 
-.loss{
-  color:#ef4444;
+.calendar-header{
+display:flex;
+justify-content:center;
+align-items:center;
+margin-bottom:16px;
+font-size:24px;
+font-weight:bold;
+}
+
+.calendar-grid{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:8px;
+}
+
+.day-name{
+text-align:center;
+font-weight:bold;
+color:#94a3b8;
+padding:8px 0;
+}
+
+.calendar-day{
+background:#0f172a;
+border:1px solid #334155;
+border-radius:12px;
+min-height:95px;
+padding:8px;
+cursor:pointer;
+transition:0.2s;
+overflow:hidden;
+}
+
+.calendar-day:hover{
+border-color:#60a5fa;
+transform:translateY(-2px);
+}
+
+.calendar-day.today{
+border:2px solid #60a5fa;
+}
+
+.calendar-day.empty{
+background:transparent;
+border:none;
+cursor:default;
+}
+
+.calendar-date{
+font-weight:bold;
+margin-bottom:6px;
+}
+
+.session-marker{
+background:#2563eb;
+border-radius:6px;
+padding:3px 5px;
+font-size:11px;
+margin-bottom:4px;
+overflow:hidden;
+white-space:nowrap;
+text-overflow:ellipsis;
 }
 
 .session-card,.hand-card{
-  background:#0f172a;
-  border:1px solid #334155;
-  border-radius:14px;
-  padding:18px;
-  margin-bottom:14px;
+background:#0f172a;
+border:1px solid #334155;
+border-radius:14px;
+padding:18px;
+margin-bottom:14px;
+scroll-margin-top:120px;
 }
 
 .session-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:12px;
+display:flex;
+justify-content:space-between;
+align-items:center;
 }
 
 .session-actions{
-  display:flex;
-  gap:8px;
+display:flex;
+gap:8px;
 }
 
 .session-info{
-  display:flex;
-  flex-wrap:wrap;
-  gap:14px;
-  margin-top:14px;
+display:flex;
+flex-wrap:wrap;
+gap:14px;
+margin-top:14px;
 }
 
 .info-box{
-  background:#1e293b;
-  border-radius:10px;
-  padding:10px 14px;
+background:#1e293b;
+padding:10px 14px;
+border-radius:10px;
 }
 
 .label{
-  color:#94a3b8;
-  font-size:12px;
-  margin-bottom:4px;
+font-size:12px;
+color:#94a3b8;
+margin-bottom:4px;
 }
 
 .edit-panel{
-  display:none;
-  margin-top:16px;
-  border-top:1px solid #334155;
-  padding-top:16px;
+display:none;
+margin-top:16px;
+padding-top:16px;
+border-top:1px solid #334155;
 }
 
 .hand-controls{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:16px;
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:16px;
 }
 
 .hand-link{
-  color:#93c5fd;
+color:#93c5fd;
 }
 
 .empty{
-  text-align:center;
-  color:#94a3b8;
+text-align:center;
+color:#94a3b8;
 }
 
 @media (max-width:1100px){
-  .stats-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
+.stats-grid{
+grid-template-columns:repeat(2,1fr);
+}
+}
+
+@media (max-width:700px){
+.calendar-grid{
+grid-template-columns:repeat(2,1fr);
+}
+
+.day-name{
+display:none;
+}
 }
 
 @media (max-width:600px){
-  .stats-grid{
-    grid-template-columns:1fr;
-  }
+.stats-grid{
+grid-template-columns:1fr;
+}
 }
 </style>
 </head>
@@ -210,31 +270,33 @@ button{
 
 <div class="form-group">
 <label>Date</label>
-<input type="date" id="date" required />
+<input type="date" id="date" required>
 </div>
 
 <div class="form-group">
 <label>Type</label>
-<input type="text" id="type" required />
+<input type="text" id="type" required>
 </div>
 
 <div class="form-group">
 <label>Hours</label>
-<input type="number" id="hours" step="0.1" required />
+<input type="number" step="0.1" id="hours" required>
 </div>
 
 <div class="form-group">
 <label>Buy-In</label>
-<input type="number" id="buyIn" required />
+<input type="number" id="buyIn" required>
 </div>
 
 <div class="form-group">
 <label>Buy-Out</label>
-<input type="number" id="buyOut" required />
+<input type="number" id="buyOut" required>
 </div>
 
 <div class="form-group">
-<button class="primary-btn" type="submit">Add Session</button>
+<button class="primary-btn" type="submit">
+Add Session
+</button>
 </div>
 
 </div>
@@ -280,11 +342,19 @@ button{
 
 <div class="card">
 
-<h2>Poker Sessions</h2>
+<details>
+
+<summary>♠ Poker Sessions Calendar</summary>
+
+<div id="calendarContainer" class="calendar"></div>
 
 <div id="sessionsContainer"></div>
 
-<p id="emptySessions" class="empty">No poker sessions yet.</p>
+<p id="emptySessions" class="empty">
+No poker sessions yet.
+</p>
+
+</details>
 
 </div>
 
@@ -294,10 +364,15 @@ button{
 
 <div class="hand-controls">
 
-<input type="text" id="handName" placeholder="Hand Name" />
-<input type="text" id="handUrl" placeholder="Paste hand review URL" />
+<input type="text" id="handName" placeholder="Hand Name">
 
-<button class="primary-btn" type="button" id="addHandBtn">
+<input type="text" id="handUrl" placeholder="Paste hand review URL">
+
+<button
+class="primary-btn"
+type="button"
+id="addHandBtn"
+>
 Add Link
 </button>
 
@@ -310,418 +385,580 @@ Add Link
 </div>
 
 <script>
-const SUPABASE_URL = "https://miawufyzrohndqnlvlea.supabase.co";
+
+const SUPABASE_URL =
+"https://miawufyzrohndqnlvlea.supabase.co";
 
 const SUPABASE_ANON_KEY =
 "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1pYXd1Znl6cm9obmRxbmx2bGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1ODU3MDksImV4cCI6MjA5NTE2MTcwOX0.wa12xK9Q1x_yrSPpFf0a1KIq3oQkDOX_CTIKZVMKJXM";
 
 const client = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_ANON_KEY
+SUPABASE_URL,
+SUPABASE_ANON_KEY
 );
 
 let sessions = [];
 let hands = [];
 
-async function loadSessions() {
-  const { data, error } = await client
-    .from("sessions")
-    .select("*")
-    .order("session_date", { ascending: false });
+async function loadSessions(){
 
-  if (error) {
-    console.error(error);
-    alert("Error loading sessions: " + error.message);
-    return;
-  }
+const { data, error } = await client
+.from("sessions")
+.select("*")
+.order("session_date",{ascending:false});
 
-  sessions = data || [];
-  renderSessions();
+if(error){
+console.error(error);
+return;
 }
 
-async function loadHands() {
-  const { data, error } = await client
-    .from("hand_reviews")
-    .select("*")
-    .order("created_at", { ascending: false });
+sessions = data || [];
 
-  if (error) {
-    console.error(error);
-    return;
-  }
-
-  hands = data || [];
-  renderHands();
+renderCalendar();
+renderSessions();
 }
 
-function updateStats() {
-  let totalProfit = 0;
-  let totalHours = 0;
-  let winning = 0;
-  let losing = 0;
+async function loadHands(){
 
-  sessions.forEach(session => {
-    const profit =
-      Number(session.buy_out) - Number(session.buy_in);
+const { data, error } = await client
+.from("hand_reviews")
+.select("*")
+.order("created_at",{ascending:false});
 
-    totalProfit += profit;
-    totalHours += Number(session.hours);
-
-    if (profit >= 0) {
-      winning++;
-    } else {
-      losing++;
-    }
-  });
-
-  const perHour =
-    totalHours > 0 ? totalProfit / totalHours : 0;
-
-  document.getElementById("totalProfit").textContent =
-    "$" + totalProfit.toFixed(2);
-
-  document.getElementById("totalHours").textContent =
-    totalHours.toFixed(1);
-
-  document.getElementById("dollarPerHour").textContent =
-    "$" + perHour.toFixed(2);
-
-  document.getElementById("winningSessions").textContent =
-    winning;
-
-  document.getElementById("losingSessions").textContent =
-    losing;
+if(error){
+console.error(error);
+return;
 }
 
-function renderSessions() {
-  const container =
-    document.getElementById("sessionsContainer");
+hands = data || [];
 
-  const empty =
-    document.getElementById("emptySessions");
-
-  container.innerHTML = "";
-
-  if (sessions.length === 0) {
-    empty.style.display = "block";
-    updateStats();
-    return;
-  }
-
-  empty.style.display = "none";
-
-  sessions.forEach(session => {
-    const profit =
-      Number(session.buy_out) - Number(session.buy_in);
-
-    const card = document.createElement("div");
-    card.className = "session-card";
-
-    card.innerHTML = `
-      <div class="session-header">
-
-        <h3>${session.session_date}</h3>
-
-        <div class="session-actions">
-
-          <button
-            class="edit-btn"
-            type="button"
-            onclick="toggleEdit(${session.id})"
-          >
-            Edit
-          </button>
-
-          <button
-            class="delete-btn"
-            type="button"
-            onclick="deleteSession(${session.id})"
-          >
-            Delete
-          </button>
-
-        </div>
-
-      </div>
-
-      <div class="session-info">
-
-        <div class="info-box">
-          <div class="label">Type</div>
-          <div>${session.session_type}</div>
-        </div>
-
-        <div class="info-box">
-          <div class="label">Hours</div>
-          <div>${session.hours}</div>
-        </div>
-
-        <div class="info-box">
-          <div class="label">Buy-In</div>
-          <div>$${Number(session.buy_in).toFixed(2)}</div>
-        </div>
-
-        <div class="info-box">
-          <div class="label">Buy-Out</div>
-          <div>$${Number(session.buy_out).toFixed(2)}</div>
-        </div>
-
-        <div class="info-box">
-          <div class="label">Profit</div>
-          <div class="${profit >= 0 ? "profit" : "loss"}">
-            $${profit.toFixed(2)}
-          </div>
-        </div>
-
-      </div>
-
-      <div class="edit-panel" id="edit-${session.id}">
-
-        <div class="form-grid">
-
-          <div class="form-group">
-            <label>Date</label>
-            <input type="date" id="edit-date-${session.id}" value="${session.session_date}" />
-          </div>
-
-          <div class="form-group">
-            <label>Type</label>
-            <input type="text" id="edit-type-${session.id}" value="${session.session_type}" />
-          </div>
-
-          <div class="form-group">
-            <label>Hours</label>
-            <input type="number" step="0.1" id="edit-hours-${session.id}" value="${session.hours}" />
-          </div>
-
-          <div class="form-group">
-            <label>Buy-In</label>
-            <input type="number" id="edit-buyin-${session.id}" value="${session.buy_in}" />
-          </div>
-
-          <div class="form-group">
-            <label>Buy-Out</label>
-            <input type="number" id="edit-buyout-${session.id}" value="${session.buy_out}" />
-          </div>
-
-          <div class="form-group">
-            <button
-              class="save-btn"
-              type="button"
-              onclick="saveEdit(${session.id})"
-            >
-              Save
-            </button>
-          </div>
-
-        </div>
-
-      </div>
-    `;
-
-    container.appendChild(card);
-  });
-
-  updateStats();
+renderHands();
 }
 
-function toggleEdit(id) {
-  const panel = document.getElementById("edit-" + id);
+function renderCalendar(){
 
-  panel.style.display =
-    panel.style.display === "block"
-      ? "none"
-      : "block";
+const container =
+document.getElementById("calendarContainer");
+
+const now = new Date();
+
+const year = now.getFullYear();
+const month = now.getMonth();
+
+const firstDay =
+new Date(year, month, 1);
+
+const lastDay =
+new Date(year, month + 1, 0);
+
+const startDay =
+firstDay.getDay();
+
+const monthName =
+firstDay.toLocaleString('default', { month:'long' });
+
+let html = `
+<div class="calendar-header">
+${monthName} ${year}
+</div>
+
+<div class="calendar-grid">
+
+<div class="day-name">Sun</div>
+<div class="day-name">Mon</div>
+<div class="day-name">Tue</div>
+<div class="day-name">Wed</div>
+<div class="day-name">Thu</div>
+<div class="day-name">Fri</div>
+<div class="day-name">Sat</div>
+`;
+
+for(let i=0;i<startDay;i++){
+html += `<div class="calendar-day empty"></div>`;
 }
 
-async function saveEdit(id) {
-  const updated = {
-    session_date:
-      document.getElementById("edit-date-" + id).value,
+for(let day=1; day<=lastDay.getDate(); day++){
 
-    session_type:
-      document.getElementById("edit-type-" + id).value,
+const formattedDate =
+`${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
 
-    hours: parseFloat(
-      document.getElementById("edit-hours-" + id).value
-    ),
+const daySessions =
+sessions.filter(
+s => s.session_date === formattedDate
+);
 
-    buy_in: parseFloat(
-      document.getElementById("edit-buyin-" + id).value
-    ),
+const today =
+day === now.getDate();
 
-    buy_out: parseFloat(
-      document.getElementById("edit-buyout-" + id).value
-    )
-  };
+html += `
+<div
+class="calendar-day ${today ? 'today' : ''}"
+onclick="jumpToSessionDate('${formattedDate}')"
+>
 
-  const { error } = await client
-    .from("sessions")
-    .update(updated)
-    .eq("id", id);
+<div class="calendar-date">${day}</div>
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
+${daySessions.map(session => {
 
-  loadSessions();
+const profit =
+Number(session.buy_out) -
+Number(session.buy_in);
+
+return `
+<div class="session-marker">
+${session.session_type}<br>${profit >= 0 ? '+' : '-'}$${Math.abs(profit).toFixed(0)}
+</div>
+`;
+
+}).join("")}
+
+</div>
+`;
 }
 
-async function deleteSession(id) {
-  const { error } = await client
-    .from("sessions")
-    .delete()
-    .eq("id", id);
+html += `</div>`;
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  loadSessions();
+container.innerHTML = html;
 }
 
-function renderHands() {
-  const container =
-    document.getElementById("handsContainer");
+function jumpToSessionDate(date){
 
-  container.innerHTML = "";
+const matchingSessions =
+sessions.filter(s => s.session_date === date);
 
-  if (hands.length === 0) {
-    container.innerHTML =
-      '<p class="empty">No hand review links yet.</p>';
-    return;
-  }
-
-  hands.forEach(hand => {
-    const card = document.createElement("div");
-
-    card.className = "hand-card";
-
-    card.innerHTML = `
-      <div style="display:flex;justify-content:space-between;gap:16px;align-items:center;">
-
-        <div>
-          <div><strong>${hand.hand_name}</strong></div>
-
-          <a
-            class="hand-link"
-            href="${hand.hand_url}"
-            target="_blank"
-          >
-            ${hand.hand_url}
-          </a>
-        </div>
-
-        <button
-          class="delete-btn"
-          type="button"
-          onclick="deleteHand(${hand.id})"
-        >
-          Delete
-        </button>
-
-      </div>
-    `;
-
-    container.appendChild(card);
-  });
+if(matchingSessions.length === 0){
+return;
 }
 
-async function addHand() {
-  const handName =
-    document.getElementById("handName").value.trim();
+let message = "";
 
-  const handUrl =
-    document.getElementById("handUrl").value.trim();
+matchingSessions.forEach((session, index) => {
 
-  if (!handName || !handUrl) {
-    alert("Enter both a hand name and URL.");
-    return;
-  }
+const profit =
+Number(session.buy_out) - Number(session.buy_in);
 
-  const { error } = await client
-    .from("hand_reviews")
-    .insert([
-      {
-        hand_name: handName,
-        hand_url: handUrl
-      }
-    ]);
+message +=
+`Session ${index + 1}
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
+Type: ${session.session_type}
+Hours: ${session.hours}
+Buy-In: $${Number(session.buy_in).toFixed(2)}
+Buy-Out: $${Number(session.buy_out).toFixed(2)}
+Profit: $${profit.toFixed(2)}
 
-  document.getElementById("handName").value = "";
-  document.getElementById("handUrl").value = "";
+`;
+});
 
-  loadHands();
+alert(message);
 }
 
-async function deleteHand(id) {
-  const { error } = await client
-    .from("hand_reviews")
-    .delete()
-    .eq("id", id);
+function updateStats(){
 
-  if (error) {
-    alert(error.message);
-    return;
-  }
+let totalProfit = 0;
+let totalHours = 0;
+let winning = 0;
+let losing = 0;
 
-  loadHands();
+sessions.forEach(session=>{
+
+const profit =
+Number(session.buy_out) - Number(session.buy_in);
+
+totalProfit += profit;
+totalHours += Number(session.hours);
+
+if(profit >= 0){
+winning++;
+}else{
+losing++;
+}
+
+});
+
+const perHour =
+totalHours > 0 ? totalProfit / totalHours : 0;
+
+document.getElementById("totalProfit").textContent =
+"$" + totalProfit.toFixed(2);
+
+document.getElementById("totalHours").textContent =
+totalHours.toFixed(1);
+
+document.getElementById("dollarPerHour").textContent =
+"$" + perHour.toFixed(2);
+
+document.getElementById("winningSessions").textContent =
+winning;
+
+document.getElementById("losingSessions").textContent =
+losing;
+}
+
+function renderSessions(){
+
+const container =
+document.getElementById("sessionsContainer");
+
+const empty =
+document.getElementById("emptySessions");
+
+container.innerHTML = "";
+
+if(sessions.length === 0){
+empty.style.display = "block";
+updateStats();
+return;
+}
+
+empty.style.display = "none";
+
+sessions.forEach(session=>{
+
+const profit =
+Number(session.buy_out) - Number(session.buy_in);
+
+const card =
+document.createElement("div");
+
+card.className = "session-card";
+
+card.dataset.date = session.session_date;
+
+card.innerHTML = `
+
+<div class="session-header">
+
+<h3>${session.session_date}</h3>
+
+<div class="session-actions">
+
+<button
+class="edit-btn"
+type="button"
+onclick="toggleEdit(${session.id})"
+>
+Edit
+</button>
+
+<button
+class="delete-btn"
+type="button"
+onclick="deleteSession(${session.id})"
+>
+Delete
+</button>
+
+</div>
+
+</div>
+
+<div class="session-info">
+
+<div class="info-box">
+<div class="label">Type</div>
+<div>${session.session_type}</div>
+</div>
+
+<div class="info-box">
+<div class="label">Hours</div>
+<div>${session.hours}</div>
+</div>
+
+<div class="info-box">
+<div class="label">Buy-In</div>
+<div>$${Number(session.buy_in).toFixed(2)}</div>
+</div>
+
+<div class="info-box">
+<div class="label">Buy-Out</div>
+<div>$${Number(session.buy_out).toFixed(2)}</div>
+</div>
+
+<div class="info-box">
+<div class="label">Profit</div>
+<div class="${profit >= 0 ? "profit" : "loss"}">
+$${profit.toFixed(2)}
+</div>
+</div>
+
+</div>
+
+<div class="edit-panel" id="edit-${session.id}">
+
+<div class="form-grid">
+
+<div class="form-group">
+<label>Date</label>
+<input type="date" id="edit-date-${session.id}" value="${session.session_date}">
+</div>
+
+<div class="form-group">
+<label>Type</label>
+<input type="text" id="edit-type-${session.id}" value="${session.session_type}">
+</div>
+
+<div class="form-group">
+<label>Hours</label>
+<input type="number" step="0.1" id="edit-hours-${session.id}" value="${session.hours}">
+</div>
+
+<div class="form-group">
+<label>Buy-In</label>
+<input type="number" id="edit-buyin-${session.id}" value="${session.buy_in}">
+</div>
+
+<div class="form-group">
+<label>Buy-Out</label>
+<input type="number" id="edit-buyout-${session.id}" value="${session.buy_out}">
+</div>
+
+<div class="form-group">
+<button class="save-btn" type="button" onclick="saveEdit(${session.id})">
+Save
+</button>
+</div>
+
+</div>
+
+</div>
+`;
+
+container.appendChild(card);
+
+});
+
+updateStats();
+}
+
+function toggleEdit(id){
+
+const panel =
+document.getElementById("edit-" + id);
+
+panel.style.display =
+panel.style.display === "block"
+? "none"
+: "block";
+}
+
+async function saveEdit(id){
+
+const updated = {
+
+session_date:
+document.getElementById("edit-date-" + id).value,
+
+session_type:
+document.getElementById("edit-type-" + id).value,
+
+hours: parseFloat(
+document.getElementById("edit-hours-" + id).value
+),
+
+buy_in: parseFloat(
+document.getElementById("edit-buyin-" + id).value
+),
+
+buy_out: parseFloat(
+document.getElementById("edit-buyout-" + id).value
+)
+
+};
+
+const { error } = await client
+.from("sessions")
+.update(updated)
+.eq("id",id);
+
+if(error){
+alert(error.message);
+return;
+}
+
+loadSessions();
+}
+
+async function deleteSession(id){
+
+const { error } = await client
+.from("sessions")
+.delete()
+.eq("id",id);
+
+if(error){
+alert(error.message);
+return;
+}
+
+loadSessions();
+}
+
+function renderHands(){
+
+const container =
+document.getElementById("handsContainer");
+
+container.innerHTML = "";
+
+if(hands.length === 0){
+
+container.innerHTML =
+'<p class="empty">No hand review links yet.</p>';
+
+return;
+}
+
+hands.forEach(hand=>{
+
+const card =
+document.createElement("div");
+
+card.className = "hand-card";
+
+card.innerHTML = `
+
+<div
+style="
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:16px;
+"
+>
+
+<div>
+
+<div>
+<strong>${hand.hand_name}</strong>
+</div>
+
+<a
+class="hand-link"
+href="${hand.hand_url}"
+target="_blank"
+>
+${hand.hand_url}
+</a>
+
+</div>
+
+<button
+class="delete-btn"
+type="button"
+onclick="deleteHand(${hand.id})"
+>
+Delete
+</button>
+
+</div>
+`;
+
+container.appendChild(card);
+
+});
+}
+
+async function addHand(){
+
+const handName =
+document.getElementById("handName").value.trim();
+
+const handUrl =
+document.getElementById("handUrl").value.trim();
+
+if(!handName || !handUrl){
+alert("Enter both a hand name and URL.");
+return;
+}
+
+const { error } = await client
+.from("hand_reviews")
+.insert([{
+hand_name: handName,
+hand_url: handUrl
+}]);
+
+if(error){
+alert(error.message);
+return;
+}
+
+document.getElementById("handName").value = "";
+document.getElementById("handUrl").value = "";
+
+loadHands();
+}
+
+async function deleteHand(id){
+
+const { error } = await client
+.from("hand_reviews")
+.delete()
+.eq("id",id);
+
+if(error){
+alert(error.message);
+return;
+}
+
+loadHands();
 }
 
 document
-  .getElementById("addHandBtn")
-  .addEventListener("click", addHand);
+.getElementById("addHandBtn")
+.addEventListener("click", addHand);
 
 document
-  .getElementById("sessionForm")
-  .addEventListener("submit", async function(event) {
+.getElementById("sessionForm")
+.addEventListener(
+"submit",
+async function(event){
 
-    event.preventDefault();
+event.preventDefault();
 
-    const session = {
-      session_date:
-        document.getElementById("date").value,
+const session = {
 
-      session_type:
-        document.getElementById("type").value,
+session_date:
+document.getElementById("date").value,
 
-      hours: parseFloat(
-        document.getElementById("hours").value
-      ),
+session_type:
+document.getElementById("type").value,
 
-      buy_in: parseFloat(
-        document.getElementById("buyIn").value
-      ),
+hours: parseFloat(
+document.getElementById("hours").value
+),
 
-      buy_out: parseFloat(
-        document.getElementById("buyOut").value
-      )
-    };
+buy_in: parseFloat(
+document.getElementById("buyIn").value
+),
 
-    const { error } = await client
-      .from("sessions")
-      .insert([session]);
+buy_out: parseFloat(
+document.getElementById("buyOut").value
+)
 
-    if (error) {
-      console.error(error);
-      alert("Failed to add session: " + error.message);
-      return;
-    }
+};
 
-    this.reset();
+const { error } = await client
+.from("sessions")
+.insert([session]);
 
-    loadSessions();
-  });
+if(error){
+alert(
+"Failed to add session: " +
+error.message
+);
+return;
+}
+
+this.reset();
+
+loadSessions();
+
+});
 
 loadSessions();
 loadHands();
+
 </script>
 
 </body>
