@@ -188,6 +188,10 @@ Calendar
 Full Sessions
 </button>
 
+<button onclick="showHandsPage()" id="handsTab">
+Notable Hands
+</button>
+
 </div>
 
 <div id="calendarPage">
@@ -268,6 +272,41 @@ gap:14px;
 <div class="card">
 <h2>All Poker Sessions</h2>
 <div id="allSessionsList"></div>
+</div>
+
+</div>
+
+
+<div id="handsPage" style="display:none;">
+
+<div class="card">
+
+<h2>Notable Hands</h2>
+
+<div style="
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:18px;
+">
+
+<input type="text" id="handName" placeholder="Hand Name">
+
+<input
+type="url"
+id="handUrl"
+placeholder="Hand Review URL"
+style="flex:1;"
+>
+
+<button onclick="addHand()">
+Add Hand
+</button>
+
+</div>
+
+<div id="handsList"></div>
+
 </div>
 
 </div>
@@ -359,6 +398,7 @@ return;
 }
 
 loadSessions();
+renderHands();
 }
 
 function changeMonth(direction){
@@ -683,6 +723,146 @@ $${profit.toFixed(2)}
 
 }
 
+
+let hands = JSON.parse(
+localStorage.getItem("notableHands") || "[]"
+);
+
+function saveHands(){
+
+localStorage.setItem(
+"notableHands",
+JSON.stringify(hands)
+);
+
+}
+
+function addHand(){
+
+const name =
+document.getElementById("handName").value;
+
+const url =
+document.getElementById("handUrl").value;
+
+if(!name || !url){
+
+alert("Please complete both fields");
+
+return;
+}
+
+hands.unshift({
+name,
+url
+});
+
+saveHands();
+
+renderHands();
+
+document.getElementById("handName").value = "";
+document.getElementById("handUrl").value = "";
+}
+
+function deleteHand(index){
+
+hands.splice(index,1);
+
+saveHands();
+
+renderHands();
+}
+
+function renderHands(){
+
+const container =
+document.getElementById("handsList");
+
+if(!container){
+return;
+}
+
+if(hands.length === 0){
+
+container.innerHTML =
+"<p>No notable hands added.</p>";
+
+return;
+}
+
+container.innerHTML = hands.map((hand,index)=>`
+
+<div style="
+background:#1e293b;
+padding:14px;
+border-radius:12px;
+margin-bottom:12px;
+border:1px solid #334155;
+display:flex;
+justify-content:space-between;
+align-items:center;
+gap:12px;
+">
+
+<div>
+
+<div style="
+font-weight:bold;
+margin-bottom:6px;
+">
+${hand.name}
+</div>
+
+<a
+href="${hand.url}"
+target="_blank"
+style="
+color:#60a5fa;
+text-decoration:none;
+word-break:break-all;
+"
+>
+${hand.url}
+</a>
+
+</div>
+
+<button
+onclick="deleteHand(${index})"
+style="
+background:#dc2626;
+padding:8px 10px;
+font-size:12px;
+"
+>
+Delete
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+function showHandsPage(){
+
+document.getElementById("calendarPage").style.display =
+"none";
+
+document.getElementById("sessionsPage").style.display =
+"none";
+
+document.getElementById("handsPage").style.display =
+"none";
+
+document.getElementById("handsPage").style.display =
+"block";
+
+renderHands();
+}
+
+
 function showCalendarPage(){
 
 document.getElementById("calendarPage").style.display =
@@ -699,6 +879,9 @@ document.getElementById("calendarPage").style.display =
 
 document.getElementById("sessionsPage").style.display =
 "block";
+
+document.getElementById("handsPage").style.display =
+"none";
 
 renderSessions();
 }
@@ -722,6 +905,7 @@ closeModal();
 };
 
 loadSessions();
+renderHands();
 
 </script>
 
